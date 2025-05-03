@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система матчмейкинга для 2 игроков</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            background-color: #f9f9f9;
+        }
+        input {
+            padding: 8px;
+            margin: 10px 0;
+            width: 80%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #status {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .player {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Система матчмейкинга</h1>
+    <p>Для начала игры требуется 2 игрока</p>
+    
+    <div class="container">
+        <h2>Подключиться к игре</h2>
+        <input type="text" id="playerName" placeholder="Введите ваше имя">
+        <button onclick="connectPlayer()">Подключиться</button>
+        
+        <div id="players">
+            <div class="player" id="player1">Игрок 1: Ожидание...</div>
+            <div class="player" id="player2">Игрок 2: Ожидание...</div>
+        </div>
+        
+        <div id="status">Ожидание игроков...</div>
+        <button id="startGame" onclick="startGame()" disabled>Начать игру</button>
+    </div>
+
+    <script>
+        let players = [];
+        
+        function connectPlayer() {
+            const playerName = document.getElementById('playerName').value.trim();
+            
+            if (!playerName) {
+                alert('Пожалуйста, введите имя');
+                return;
+            }
+            
+            if (players.length >= 2) {
+                alert('Игра уже заполнена (2 игрока)');
+                return;
+            }
+            
+            if (players.includes(playerName)) {
+                alert('Имя уже занято');
+                return;
+            }
+            
+            players.push(playerName);
+            updatePlayersList();
+            
+            if (players.length === 2) {
+                document.getElementById('status').textContent = 'Оба игрока подключены!';
+                document.getElementById('startGame').disabled = false;
+            } else {
+                document.getElementById('status').textContent = `Ожидание второго игрока... (1/2)`;
+            }
+            
+            document.getElementById('playerName').value = '';
+        }
+        
+        function updatePlayersList() {
+            const player1Element = document.getElementById('player1');
+            const player2Element = document.getElementById('player2');
+            
+            player1Element.textContent = players.length > 0 
+                ? `Игрок 1: ${players[0]}` 
+                : 'Игрок 1: Ожидание...';
+                
+            player2Element.textContent = players.length > 1 
+                ? `Игрок 2: ${players[1]}` 
+                : 'Игрок 2: Ожидание...';
+        }
+        
+        function startGame() {
+            if (players.length === 2) {
+                document.getElementById('status').textContent = `Игра начинается: ${players[0]} vs ${players[1]}`;
+                document.getElementById('startGame').disabled = true;
+                // Здесь можно добавить логику для начала игры
+            } else {
+                alert('Для начала игры нужно 2 игрока');
+            }
+        }
+    </script>
+</body>
+</html>
